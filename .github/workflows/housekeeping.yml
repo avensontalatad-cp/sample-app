@@ -1,0 +1,54 @@
+name: Housekeeping
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    name: Update packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout internal branch
+        uses: actions/checkout@v2
+        with:
+          ref: internal
+        
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          
+      - name: Prepare environment
+        run: cp .env.example .env
+                    
+      - name: Install Composer packages
+        run: composer install
+          
+      - name: Prepare Laravel Application
+        run: php artisan key:generate
+
+          
+      - name: Update Composer packages
+        run: composer update
+        
+      - name: Update Laravel Nova assets
+        run: php artisan nova:publish
+        
+      - name: Update NPM packages
+        run: yarn upgrade
+        
+      - name: Check if there are changes
+        id: changes
+        uses: UnicornGlobal/has-changes-action@v1.0.11
+
+      - name: Commit changes
+        if: steps.changes.outputs.changed == 1
+        run: |
+          git config user.name rem
+          git config user.email rem@coreproc.ph
+          git add .
+          git commit -m "Housekeeping: Update dependencies"
+          git push
+

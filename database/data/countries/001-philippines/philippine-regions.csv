@@ -1,0 +1,19 @@
+id,country_id,name,designation
+1,174,National Capital Region,NCR
+2,174,Cordillera Administrative Region,CAR
+3,174,Ilocos Region,Region I
+4,174,Cagayan Valley,Region II
+5,174,Central Luzon,Region III
+6,174,CALABARZON,Region IV-A
+7,174,MIMAROPA,Region IV-B
+8,174,Bicol Region,Region V
+9,174,Western Visayas,Region VI
+10,174,Central Visayas,Region VII
+11,174,Eastern Visayas,Region VIII
+12,174,Negros Island Region,Region XVIII
+13,174,Zamboanga Peninsula,Region IX
+14,174,Northern Mindanao,Region X
+15,174,Davao Region,Region XI
+16,174,SOCCSKSARGEN,Region XII
+17,174,Caraga,Region XIII
+18,174,Autonomous Region in Muslim Mindanao,ARMM

@@ -1,0 +1,89 @@
+name: Test and Deploy
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+  push:
+    branches:
+      - master
+      - develop
+      - internal
+
+jobs:
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Run composer install
+        run: composer install -n --prefer-dist
+
+      - name: Begin Database Service
+        run: sudo systemctl start mysql.service
+
+      - name: Create Database
+        run: mysql -uroot -proot -e "CREATE DATABASE laravel"
+
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run code sniffer
+        run: ./vendor/bin/phpcs
+
+      - name: Run PHP Static Analysis Tool
+        run: ./vendor/bin/phpstan analyse
+
+      - name: Cache yarn dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Run yarn
+        run: yarn && yarn dev
+
+      - name: Run migrate and seed database
+        run: php artisan migrate:fresh --seed
+
+      - name: Run tests
+        run: ./vendor/bin/phpunit
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@master
+        if: failure()
+        with:
+          name: Logs
+          path: ./storage/logs
+
+#  deploy-staging:
+#    runs-on: ubuntu-latest
+#    name: Deploy to client staging server
+#    if: ${{ github.ref == 'refs/heads/develop' }}
+#    needs: tests
+#    steps:
+#      - name: Trigger Forge deploy script on client staging server
+#        run: curl --request GET "{{ DEPLOY_URL }}"
+#
+#  deploy-production:
+#    runs-on: ubuntu-latest
+#    name: Deploy to client production server
+#    if: ${{ github.ref == 'refs/heads/master' }}
+#    needs: tests
+#    steps:
+#      - name: Trigger Forge deploy script on client production server
+#        run: curl --request GET "{{ DEPLOY_URL }}"

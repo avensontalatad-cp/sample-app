@@ -14,5 +14,9 @@ use App\Http\Controllers\CountryController;
 |
 */
 
+Route::get('/', function(){
+    return redirect()->route('country.index');
+});
+
 Route::resource('/country', CountryController::class);
 

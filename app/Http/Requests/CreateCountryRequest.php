@@ -24,9 +24,9 @@ class CreateCountryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
-            'code' => ['required'],
-            'dialing_code' => ['required']
+            'name' => ['required', 'string'],
+            'code' => ['required', 'string'],
+            'dialing_code' => ['required', 'integer']
         ];
     }
 }

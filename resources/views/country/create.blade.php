@@ -1,11 +1,6 @@
 @extends('templates.maintemplate')
 @section('content')
 <div class="container">
-    @if(session()->has('error'))
-        <div class="alert alert-danger text-center">
-            {{ session()->get('error') }}
-        </div>
-    @endif
     <div class="mb-3 mt-3">
         <form method="POST" action="{{route('country.store')}}">
             @csrf

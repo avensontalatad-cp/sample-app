@@ -2,16 +2,22 @@
 @section('content')
 <div class="container">
     <div class="mb-3 mt-3">
-        <label>Country Name</label>
         <form method="POST" action="{{route('country.store')}}">
             @csrf
-            <div class="row">
-                <div class="col-lg-10">
-                    <input type="text" class="form-control" name="country_name" required>
-                </div>
-                <div class="col-lg-2">
-                    <button class="btn btn-primary">Add</button>
-                </div>
+            <label>Country Name</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" name="name" required>
+            </div>
+            <label>Country Code</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" name="code" required>
+            </div>
+            <label>Country Dialing Code</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" name="dialing_code" required>
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-primary">Add</button>
             </div>
         </form>
     </div>

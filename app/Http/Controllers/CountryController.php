@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Country;
+use App\Http\Requests\CreateCountryRequest;
+use App\Http\Requests\EditCountryRequest;
+
 
 class CountryController extends Controller
 {
@@ -35,24 +38,10 @@ class CountryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCountryRequest $request)
     {
-        $validate = $request->validate([
-            'country_name' => ['required', 'string']
-        ]);
-
-        $country = new Country([
-            'name' => $request->get('country_name')
-        ]);
-
-        if($country->save())
-        {
-            return redirect()->route('country.index')->with('message', $country->name.' Added');
-        }
-        else
-        {
-            return redirect()->route('country.index')->with('error', 'Failed to Add Country');
-        }
+        $country = Country::create($request->all());
+        return redirect()->route('country.index')->with('message', $country->name.' Added');
     }
 
     /**
@@ -61,10 +50,8 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Country $country)
     {
-        $country = Country::find($id);
-
         return view('country.show', compact('country'));
     }
 
@@ -74,10 +61,8 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Country $country)
     {
-        $country = Country::find($id);
-
         return view('country.edit', compact('country'));
     }
 
@@ -88,13 +73,10 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,int $id)
+    public function update(EditCountryRequest $request,Country $country)
     {
-        $country = Country::find($id);
         $oldName = $country->name;
-        $country->name = $request->get('country_name');
-        $country->save();
-
+        $country->update($request->all());
         return redirect()->route('country.index')->with('message', $oldName.' has been updated to '.$country->name);
     }
 
@@ -107,7 +89,6 @@ class CountryController extends Controller
     public function destroy(Country $country)
     {
         $country->delete();
-
         return redirect()->route('country.index')->with('message', $country->name.' Deleted');
     }
 }

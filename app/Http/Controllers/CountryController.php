@@ -18,6 +18,7 @@ class CountryController extends Controller
     public function index()
     {
         $country = Country::all();
+
         return view('country.index', compact('country'));
     }
 
@@ -34,19 +35,20 @@ class CountryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(CountryRequest $request)
     {
         $country = Country::create($request->all());
-        return redirect()->route('country.index')->with('message', $country->name.' Added');
+
+        return redirect()->route('country.index')->with('message', $country->name . ' Added');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show(Country $country)
@@ -57,7 +59,7 @@ class CountryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Country $country)
@@ -68,27 +70,29 @@ class CountryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CountryRequest $request,Country $country)
+    public function update(CountryRequest $request, Country $country)
     {
         $oldName = $country->name;
         $country->update($request->all());
-        return redirect()->route('country.index')->with('message', $oldName.' has been updated to '.$country->name);
+
+        return redirect()->route('country.index')->with('message', $oldName . ' has been updated to ' . $country->name);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Country $country)
     {
         $country->delete();
-        return redirect()->route('country.index')->with('message', $country->name.' Deleted');
+
+        return redirect()->route('country.index')->with('message', $country->name . ' Deleted');
     }
 }
 

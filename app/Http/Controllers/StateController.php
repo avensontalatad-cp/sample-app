@@ -32,19 +32,20 @@ class StateController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(StateRequest $request)
     {
         $state = State::create($request->all());
-        return back()->with('message', $state->name.' Added');
+
+        return back()->with('message', $state->name . ' Added');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show(State $state)
@@ -55,7 +56,7 @@ class StateController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit(State $state)
@@ -66,8 +67,8 @@ class StateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(StateRequest $request, State $state)
@@ -76,18 +77,20 @@ class StateController extends Controller
         $state->update($request->all());
         $state->save();
 
-        return redirect()->route('country.show', $state->country->id)->with('message', $oldName.' has been updated to '.$state->name);
+        return redirect()->route('country.show', $state->country->id)->with('message',
+            $oldName . ' has been updated to ' . $state->name);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(State $state)
     {
         $state->delete();
-        return back()->with('message', $state->name.' Deleted');
+
+        return back()->with('message', $state->name . ' Deleted');
     }
 }

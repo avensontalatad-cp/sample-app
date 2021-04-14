@@ -48,7 +48,8 @@
                                 <form method="POST" action="{{route('country.destroy', $country->id)}}">
                                     @method('DELETE')
                                     @csrf
-                                    <input type="submit" class="btn btn-primary" value="Yes">                                </form>
+                                    <input type="submit" class="btn btn-primary" value="Yes">
+                                </form>
                             </div>
                         </div>
                     </div>

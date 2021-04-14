@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditCountryRequest extends FormRequest
+class StateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,8 @@ class EditCountryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
-            'code' => ['required'],
-            'dialing_code' => ['required']
+            'name' => ['required', 'max:255'],
+            'country_id' => ['required', 'integer']
         ];
     }
 }

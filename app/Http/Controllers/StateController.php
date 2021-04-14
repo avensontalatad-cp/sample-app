@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Country;
-use App\Http\Requests\CountryRequest;
 use App\Models\State;
+use App\Models\Country;
+use App\Http\Requests\StateRequest;
 
-
-class CountryController extends Controller
+class StateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +16,7 @@ class CountryController extends Controller
      */
     public function index()
     {
-        $country = Country::all();
-        return view('country.index', compact('country'));
+        //
     }
 
     /**
@@ -28,7 +26,7 @@ class CountryController extends Controller
      */
     public function create()
     {
-        return view('country.create');
+        //
     }
 
     /**
@@ -37,10 +35,10 @@ class CountryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CountryRequest $request)
+    public function store(StateRequest $request)
     {
-        $country = Country::create($request->all());
-        return redirect()->route('country.index')->with('message', $country->name.' Added');
+        $state = State::create($request->all());
+        return back()->with('message', $state->name.' Added');
     }
 
     /**
@@ -49,9 +47,9 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Country $country)
+    public function show(State $state)
     {
-        return view('country.show', compact('country'));
+        return view('state.show', compact('state'));
     }
 
     /**
@@ -60,9 +58,9 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Country $country)
+    public function edit(State $state)
     {
-        return view('country.edit', compact('country'));
+        return view('state.edit', compact('state'));
     }
 
     /**
@@ -72,11 +70,13 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CountryRequest $request,Country $country)
+    public function update(StateRequest $request, State $state)
     {
-        $oldName = $country->name;
-        $country->update($request->all());
-        return redirect()->route('country.index')->with('message', $oldName.' has been updated to '.$country->name);
+        $oldName = $state->name;
+        $state->update($request->all());
+        $state->save();
+
+        return redirect()->route('country.show', $state->country->id)->with('message', $oldName.' has been updated to '.$state->name);
     }
 
     /**
@@ -85,10 +85,9 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Country $country)
+    public function destroy(State $state)
     {
-        $country->delete();
-        return redirect()->route('country.index')->with('message', $country->name.' Deleted');
+        $state->delete();
+        return back()->with('message', $state->name.' Deleted');
     }
 }
-
